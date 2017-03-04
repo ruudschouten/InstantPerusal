@@ -9,21 +9,29 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity {
+import net.danlew.android.joda.JodaTimeAndroid;
 
+import java.util.concurrent.TimeUnit;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+public class MainActivity extends AppCompatActivity {
+@BindView(R.id.toolbar) Toolbar toolbar;
+@BindView(R.id.fab) FloatingActionButton fab;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        ButterKnife.bind(this);
+        JodaTimeAndroid.init(this);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        setSupportActionBar(toolbar);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Snackbar.make(view, "Adding chapter", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                AddChapter();
             }
         });
     }
@@ -48,5 +56,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void AddChapter() {
     }
 }
