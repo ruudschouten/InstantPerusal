@@ -1,24 +1,36 @@
 package com.blappole.instantperusal;
 
+import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
-import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
-@BindView(R.id.toolbar) Toolbar toolbar;
-@BindView(R.id.fab) FloatingActionButton fab;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.fab) FloatingActionButton fab;
+    @BindView(R.id.lvBooks) ListView lvBooks;
+    @BindView(R.id.tvBooksEmpty) TextView tvEmpty;
+
+    BookArrayAdapter bookArrayAdapter;
+    ArrayList<Book> books;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,10 +42,13 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Adding chapter", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-                AddChapter();
+                addBookDialog();
             }
         });
+        books = new ArrayList<>();
+        bookArrayAdapter = new BookArrayAdapter(this, R.layout.book_layout, books);
+        lvBooks.setAdapter(bookArrayAdapter);
+        lvBooks.setEmptyView(tvEmpty);
     }
 
     @Override
@@ -58,6 +73,20 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void AddChapter() {
+    public void addBookDialog() {
+        final Dialog bookDialog = new Dialog(this);
+        bookDialog.setContentView(R.layout.add_book_dialog);
+        final Button dialogButton = (Button) bookDialog.findViewById(R.id.btnAddBook);
+        final EditText bookName = (EditText) bookDialog.findViewById(R.id.editBookName);
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Book b = new Book(bookName.getText().toString());
+                books.add(b);
+                bookDialog.dismiss();
+                bookArrayAdapter.notifyDataSetChanged();
+            }
+        });
+        bookDialog.show();
     }
 }
