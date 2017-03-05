@@ -1,6 +1,7 @@
 package com.blappole.instantperusal;
 
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -19,6 +20,7 @@ public class BookActivity extends AppCompatActivity {
     @BindView(R.id.fabEdit) FloatingActionButton fabEdit;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.container) ViewPager viewPager;
+    @BindView(R.id.tbLayout) TabLayout tabLayout;
 
     private BookPagerAdapter bookPagerAdapter;
     private Book book;
@@ -28,11 +30,12 @@ public class BookActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book);
         ButterKnife.bind(this);
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             savedInstanceState = getIntent().getExtras();
         }
         book = savedInstanceState.getParcelable("book");
         assert book != null;
+        setTitle(book.Name);
         setSupportActionBar(toolbar);
         bookPagerAdapter = new BookPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(bookPagerAdapter);
@@ -44,12 +47,10 @@ public class BookActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                if(position == 0) {
+                if (position == 0) {
                     fabAdd.setVisibility(View.GONE);
                     fabEdit.setVisibility(View.VISIBLE);
-                    setTitle("Details");
                 } else {
-                    setTitle("Chapters");
                     fabAdd.setVisibility(View.VISIBLE);
                     fabEdit.setVisibility(View.GONE);
                 }
@@ -60,9 +61,11 @@ public class BookActivity extends AppCompatActivity {
 
             }
         });
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     private class BookPagerAdapter extends FragmentPagerAdapter {
+        private String tabTitles[] = new String[] {"Details", "Chapters"};
         BookPagerAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -79,6 +82,11 @@ public class BookActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             return 2;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return tabTitles[position];
         }
     }
 }
