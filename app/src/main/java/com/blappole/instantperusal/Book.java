@@ -14,7 +14,7 @@ class Book implements Parcelable {
     String Year;
     int Pages;
 
-    private ArrayList<Chapter> Chapters;
+    public ArrayList<Chapter> Chapters;
 
     //region Parcelable
     protected Book(Parcel in) {
