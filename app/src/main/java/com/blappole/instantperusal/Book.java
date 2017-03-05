@@ -54,6 +54,8 @@ class Book implements Parcelable {
 
     Book(String name) {
         Name = name;
+        Author = "Unknown";
+        Year = "Unknown";
         Chapters = new ArrayList<>();
     }
 
