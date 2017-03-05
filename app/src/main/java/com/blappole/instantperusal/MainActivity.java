@@ -23,10 +23,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
-    @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.fab) FloatingActionButton fab;
-    @BindView(R.id.lvBooks) ListView lvBooks;
-    @BindView(R.id.tvBooksEmpty) TextView tvEmpty;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+    @BindView(R.id.lvBooks)
+    ListView lvBooks;
+    @BindView(R.id.tvBooksEmpty)
+    TextView tvEmpty;
 
     BookArrayAdapter bookArrayAdapter;
     ArrayList<Book> books;
@@ -49,6 +53,15 @@ public class MainActivity extends AppCompatActivity {
         bookArrayAdapter = new BookArrayAdapter(this, R.layout.book_layout, books);
         lvBooks.setAdapter(bookArrayAdapter);
         lvBooks.setEmptyView(tvEmpty);
+        lvBooks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Book book = (Book) adapterView.getItemAtPosition(i);
+                Intent intent = new Intent(MainActivity.this, BookActivity.class);
+                intent.putExtra("book", book);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
