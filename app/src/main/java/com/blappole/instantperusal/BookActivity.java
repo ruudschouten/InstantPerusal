@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.view.View;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,10 +33,33 @@ public class BookActivity extends AppCompatActivity {
         }
         book = savedInstanceState.getParcelable("book");
         assert book != null;
-        setTitle(book.Name);
         setSupportActionBar(toolbar);
         bookPagerAdapter = new BookPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(bookPagerAdapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if(position == 0) {
+                    fabAdd.setVisibility(View.GONE);
+                    fabEdit.setVisibility(View.VISIBLE);
+                    setTitle("Details");
+                } else {
+                    setTitle("Chapters");
+                    fabAdd.setVisibility(View.VISIBLE);
+                    fabEdit.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     private class BookPagerAdapter extends FragmentPagerAdapter {
