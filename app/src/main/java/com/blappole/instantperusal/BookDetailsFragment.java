@@ -24,16 +24,12 @@ public class BookDetailsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_book_details, container, false);
-
         ButterKnife.bind(this, v);
-
-        if(savedInstanceState == null) {
-            savedInstanceState = getArguments();
-        }
+        if(savedInstanceState == null) { savedInstanceState = getArguments(); }
 
         Book book = savedInstanceState.getParcelable("book");
         assert book != null;
-        bookName.setText(Utils.GetStyledString(String.format("Full title: %s", book.Name), "Full title:"));
+        bookName.setText(Utils.GetStyledString(String.format("Title: %s", book.Name), "Title:"));
         bookAuthor.setText(Utils.GetStyledString(String.format("Author: %s", book.Author), "Author:"));
         bookYear.setText(Utils.GetStyledString(String.format("Year: %s", book.Year), "Year:"));
         bookPages.setText(Utils.GetStyledString(String.format("Pages: %s", book.Pages), "Pages:"));
