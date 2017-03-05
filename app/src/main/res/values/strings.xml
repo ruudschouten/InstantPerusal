@@ -7,4 +7,5 @@
     <string name="new_book_name">Name</string>
     <string name="add">Add</string>
     <string name="book_icon">Book icon</string>
+    <string name="title_activity_book">Book Activity</string>
 </resources>
