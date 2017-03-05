@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         books = new ArrayList<>();
+        books.add(new Book("Game of Thrones"));
         bookArrayAdapter = new BookArrayAdapter(this, R.layout.book_layout, books);
         lvBooks.setAdapter(bookArrayAdapter);
         lvBooks.setEmptyView(tvEmpty);
@@ -91,10 +92,13 @@ public class MainActivity extends AppCompatActivity {
         bookDialog.setContentView(R.layout.add_book_dialog);
         final Button dialogButton = (Button) bookDialog.findViewById(R.id.btnAddBook);
         final EditText bookName = (EditText) bookDialog.findViewById(R.id.editBookName);
+        final EditText bookAuthor = (EditText) bookDialog.findViewById(R.id.editBookAuthor);
+        final EditText bookYear = (EditText) bookDialog.findViewById(R.id.editBookYear);
+        final EditText bookPages = (EditText) bookDialog.findViewById(R.id.editBookPages);
         dialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Book b = new Book(bookName.getText().toString());
+                Book b = new Book(bookName.getText().toString(), bookAuthor.getText().toString(), bookYear.getText().toString(), Integer.valueOf(bookPages.getText().toString()));
                 books.add(b);
                 bookDialog.dismiss();
                 bookArrayAdapter.notifyDataSetChanged();
