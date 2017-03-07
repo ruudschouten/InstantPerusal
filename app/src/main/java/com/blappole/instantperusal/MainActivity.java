@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
@@ -100,10 +102,19 @@ public class MainActivity extends AppCompatActivity {
         dialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Book b = new Book(bookName.getText().toString(), bookAuthor.getText().toString(), bookYear.getText().toString(), Integer.valueOf(bookPages.getText().toString()));
-                books.add(b);
-                bookDialog.dismiss();
-                bookArrayAdapter.notifyDataSetChanged();
+                String name = bookName.getText().toString();
+                String author = bookAuthor.getText().toString();
+                String year = bookYear.getText().toString();
+                String pages = bookPages.getText().toString();
+
+                if(TextUtils.isEmpty(name) || TextUtils.isEmpty(author) || TextUtils.isEmpty(year) || TextUtils.isEmpty(pages)) {
+                    Toast.makeText(MainActivity.this, "Please fill in all fields.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Book b = new Book(name, author, year, Integer.valueOf(pages));
+                    books.add(b);
+                    bookDialog.dismiss();
+                    bookArrayAdapter.notifyDataSetChanged();
+                }
             }
         });
         bookDialog.show();
