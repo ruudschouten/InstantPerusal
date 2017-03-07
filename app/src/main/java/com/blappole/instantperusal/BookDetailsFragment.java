@@ -1,22 +1,25 @@
 package com.blappole.instantperusal;
 
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class BookDetailsFragment extends Fragment {
-    @BindView(R.id.frBookName) TextView bookName;
-    @BindView(R.id.frBookAuthor) TextView bookAuthor;
-    @BindView(R.id.frBookYear) TextView bookYear;
-    @BindView(R.id.frBookPages) TextView bookPages;
-    @BindView(R.id.frBookTimeSpent) TextView bookTimeSpent;
-    @BindView(R.id.frBookAverageTime) TextView bookAverageTime;
+    @BindView(R.id.fabEdit) FloatingActionButton fabEdit;
+    @BindView(R.id.frBookName) EditText bookName;
+    @BindView(R.id.frBookAuthor) EditText bookAuthor;
+    @BindView(R.id.frBookYear) EditText bookYear;
+    @BindView(R.id.frBookPages) EditText bookPages;
+    @BindView(R.id.frBookTimeSpent) EditText bookTimeSpent;
+    @BindView(R.id.frBookAverageTime) EditText bookAverageTime;
 
     public BookDetailsFragment() {
     }
