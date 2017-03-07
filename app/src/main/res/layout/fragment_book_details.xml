@@ -1,68 +1,106 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:paddingBottom="8dp">
 
-        <TextView
+        <EditText
             android:id="@+id/frBookName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:focusable="false"
+            android:hint="Name"
+            android:minWidth="120dp"
+            android:paddingTop="4dp"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginLeft="8dp" />
 
-        <TextView
+        <EditText
             android:id="@+id/frBookAuthor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
+            android:focusable="false"
+            android:hint="Author"
+            android:minWidth="120dp"
+            android:paddingTop="4dp"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/frBookName" />
+            app:layout_constraintTop_toBottomOf="@+id/frBookName"
+            android:layout_marginLeft="8dp" />
 
-        <TextView
+        <EditText
             android:id="@+id/frBookYear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
+            android:focusable="false"
+            android:hint="Year"
+            android:minWidth="120dp"
+            android:paddingTop="4dp"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/frBookAuthor" />
+            app:layout_constraintTop_toBottomOf="@+id/frBookAuthor"
+            android:layout_marginLeft="8dp" />
 
-        <TextView
+        <EditText
             android:id="@+id/frBookPages"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
+            android:focusable="false"
+            android:hint="Pages"
+            android:minWidth="120dp"
+            android:paddingTop="4dp"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/frBookYear" />
+            app:layout_constraintTop_toBottomOf="@+id/frBookYear"
+            android:layout_marginLeft="8dp" />
 
-        <TextView
+        <EditText
             android:id="@+id/frBookTimeSpent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
+            android:minWidth="120dp"
+            android:paddingTop="4dp"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/frBookPages" />
+            app:layout_constraintTop_toBottomOf="@+id/frBookPages"
+            android:layout_marginLeft="8dp" />
 
-        <TextView
+        <EditText
             android:id="@+id/frBookAverageTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
+            android:minWidth="120dp"
+            android:paddingTop="4dp"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/frBookTimeSpent" />
+            app:layout_constraintTop_toBottomOf="@+id/frBookTimeSpent"
+            android:layout_marginLeft="8dp" />
+
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_edit_white_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
 
-</ScrollView>
+</LinearLayout>
 
