@@ -1,6 +1,5 @@
 package com.blappole.instantperusal;
 
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -10,7 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.view.View;
+import android.view.WindowManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,7 +19,6 @@ public class BookActivity extends AppCompatActivity {
     @BindView(R.id.container) ViewPager viewPager;
     @BindView(R.id.tbLayout) TabLayout tabLayout;
 
-    private BookPagerAdapter bookPagerAdapter;
     private Book book;
 
     @Override
@@ -28,6 +26,7 @@ public class BookActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book);
         ButterKnife.bind(this);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         if (savedInstanceState == null) {
             savedInstanceState = getIntent().getExtras();
         }
@@ -35,13 +34,13 @@ public class BookActivity extends AppCompatActivity {
         assert book != null;
         setTitle(book.Name);
         setSupportActionBar(toolbar);
-        bookPagerAdapter = new BookPagerAdapter(getSupportFragmentManager());
+        BookPagerAdapter bookPagerAdapter = new BookPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(bookPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
     }
 
     private class BookPagerAdapter extends FragmentPagerAdapter {
-        private String tabTitles[] = new String[] {"Details", "Chapters"};
+        private String tabTitles[] = new String[]{"Details", "Chapters"};
         BookPagerAdapter(FragmentManager fm) {
             super(fm);
         }
