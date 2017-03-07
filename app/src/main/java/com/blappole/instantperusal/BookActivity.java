@@ -16,8 +16,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class BookActivity extends AppCompatActivity {
-    @BindView(R.id.fabAdd) FloatingActionButton fabAdd;
-    @BindView(R.id.fabEdit) FloatingActionButton fabEdit;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.container) ViewPager viewPager;
     @BindView(R.id.tbLayout) TabLayout tabLayout;
@@ -39,28 +37,6 @@ public class BookActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         bookPagerAdapter = new BookPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(bookPagerAdapter);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                if (position == 0) {
-                    fabAdd.setVisibility(View.GONE);
-                    fabEdit.setVisibility(View.VISIBLE);
-                } else {
-                    fabAdd.setVisibility(View.VISIBLE);
-                    fabEdit.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
         tabLayout.setupWithViewPager(viewPager);
     }
 
