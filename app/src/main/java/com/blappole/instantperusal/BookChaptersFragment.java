@@ -1,19 +1,18 @@
 package com.blappole.instantperusal;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Interpolator;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,10 +23,11 @@ public class BookChaptersFragment extends Fragment {
     @BindView(R.id.frChapterContainer) ListView lvChapters;
     Book book;
     ChapterArrayAdapter adapter;
+    View v;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_book_chapters, container, false);
+        v = inflater.inflate(R.layout.fragment_book_chapters, container, false);
         ButterKnife.bind(this, v);
 
         if(savedInstanceState == null) {
@@ -40,6 +40,17 @@ public class BookChaptersFragment extends Fragment {
         adapter = new ChapterArrayAdapter(v.getContext(), R.layout.chapter_layout, book.Chapters);
         lvChapters.setAdapter(adapter);
         lvChapters.setEmptyView(tvEmpty);
+        lvChapters.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //TODO: Open new Chapter intent
+                Chapter chapter = (Chapter) lvChapters.getItemAtPosition(i);
+                Intent intent = new Intent(v.getContext(), ChapterActivity.class);
+                intent.putExtra("book", book);
+                intent.putExtra("chapter", chapter);
+                startActivity(intent);
+            }
+        });
 
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
