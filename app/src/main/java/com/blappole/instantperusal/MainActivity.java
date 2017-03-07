@@ -50,7 +50,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         books = new ArrayList<>();
-        books.add(new Book("Game of Thrones"));
+        Book book = new Book("A Game of Thrones", "George R. R. Martin", "1997", 694);
+        book.CoverImgId = R.drawable.agot;
+        books.add(book);
         bookArrayAdapter = new BookArrayAdapter(this, R.layout.book_layout, books);
         lvBooks.setAdapter(bookArrayAdapter);
         lvBooks.setEmptyView(tvEmpty);
