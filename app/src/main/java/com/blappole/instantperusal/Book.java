@@ -13,8 +13,11 @@ class Book implements Parcelable {
     String Author;
     String Year;
     int Pages;
+    int CoverImgId;
+    ArrayList<Chapter> Chapters;
 
-    public ArrayList<Chapter> Chapters;
+    private Chapter longestChapter;
+    private Chapter shortestChapter;
 
     //region Parcelable
     protected Book(Parcel in) {
@@ -22,6 +25,7 @@ class Book implements Parcelable {
         Author = in.readString();
         Year = in.readString();
         Pages = in.readInt();
+        CoverImgId = in.readInt();
         Chapters = in.createTypedArrayList(Chapter.CREATOR);
     }
 
@@ -48,16 +52,11 @@ class Book implements Parcelable {
         parcel.writeString(Author);
         parcel.writeString(Year);
         parcel.writeInt(Pages);
+        parcel.writeInt(CoverImgId);
         parcel.writeTypedList(Chapters);
     }
     //endregion
 
-    Book(String name) {
-        Name = name;
-        Author = "Unknown";
-        Year = "Unknown";
-        Chapters = new ArrayList<>();
-    }
     Book(String name, String author, String year, int pages) {
         Name = name;
         Author = author;
