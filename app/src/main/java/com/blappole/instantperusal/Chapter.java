@@ -40,7 +40,9 @@ class Chapter implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(Name);
         parcel.writeInt(Pages);
-        parcel.writeLong(TimeSpent.getMillis());
+        if(TimeSpent != null) {
+            parcel.writeLong(TimeSpent.getMillis());
+        }
     }
     //endregion
 
