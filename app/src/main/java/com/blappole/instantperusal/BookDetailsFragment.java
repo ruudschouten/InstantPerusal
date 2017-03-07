@@ -7,19 +7,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.ImageButton;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class BookDetailsFragment extends Fragment {
-    @BindView(R.id.fabEdit) FloatingActionButton fabEdit;
+
     @BindView(R.id.frBookName) EditText bookName;
     @BindView(R.id.frBookAuthor) EditText bookAuthor;
     @BindView(R.id.frBookYear) EditText bookYear;
     @BindView(R.id.frBookPages) EditText bookPages;
     @BindView(R.id.frBookTimeSpent) EditText bookTimeSpent;
     @BindView(R.id.frBookAverageTime) EditText bookAverageTime;
+    @BindView(R.id.fabEdit) FloatingActionButton fabEdit;
+    @BindView(R.id.imgBookCover) ImageButton btnBookCover;
+
+    private boolean editing = false;
 
     public BookDetailsFragment() {
     }
@@ -32,14 +36,57 @@ public class BookDetailsFragment extends Fragment {
 
         Book book = savedInstanceState.getParcelable("book");
         assert book != null;
-        bookName.setText(Utils.GetStyledString(String.format("Title: %s", book.Name), "Title:"));
-        bookAuthor.setText(Utils.GetStyledString(String.format("Author: %s", book.Author), "Author:"));
-        bookYear.setText(Utils.GetStyledString(String.format("Year: %s", book.Year), "Year:"));
-        bookPages.setText(Utils.GetStyledString(String.format("Pages: %s", book.Pages), "Pages:"));
-        bookTimeSpent.setText(Utils.GetStyledString(String.format("Time spent: %s", book.getTimeRead()), "Time spent:"));
-        bookAverageTime.setText(Utils.GetStyledString(String.format("Average time per chapter: %s", book.getAverageTimePerChapter()), "Average time per chapter:"));
+        bookName.setText(book.Name);
+        bookAuthor.setText(book.Author);
+        bookYear.setText(book.Year);
+        bookPages.setText(String.valueOf(book.Pages));
+        bookTimeSpent.setText(book.getTimeRead());
+        bookAverageTime.setText(book.getAverageTimePerChapter());
+        if(book.CoverImgId != 0) {
+            btnBookCover.setImageDrawable(getResources().getDrawable(book.CoverImgId));
+        }
+
+        btnBookCover.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO: Show dialog where user can upload poster
+            }
+        });
+
+        fabEdit.setVisibility(View.VISIBLE);
+        fabEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!editing) {
+                    enableEditing();
+                }
+                 else {
+                    disableEditing();
+                    saveBookChanges();
+                }
+                editing = !editing;
+            }
+        });
 
         return v;
+    }
+
+    public void enableEditing() {
+        bookName.setEnabled(true);
+        bookAuthor.setEnabled(true);
+        bookYear.setEnabled(true);
+        bookPages.setEnabled(true);
+    }
+
+    public void disableEditing() {
+        bookName.setEnabled(false);
+        bookAuthor.setEnabled(false);
+        bookYear.setEnabled(false);
+        bookPages.setEnabled(false);
+    }
+
+    public void saveBookChanges() {
+        //TODO: Add functionality
     }
 
     public static BookDetailsFragment newInstance(Book book) {
