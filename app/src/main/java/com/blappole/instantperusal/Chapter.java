@@ -5,10 +5,11 @@ import android.os.Parcelable;
 
 import org.joda.time.*;
 
-class Chapter implements Parcelable {
-    String Name;
-    int Pages;
-    Period TimeSpent;
+public class Chapter implements Parcelable {
+    public int Id;
+    public String Name;
+    public int Pages;
+    public Period TimeSpent;
 
     private LocalDateTime startTime;
 

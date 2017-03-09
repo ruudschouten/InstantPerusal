@@ -8,13 +8,14 @@ import org.joda.time.format.PeriodFormat;
 
 import java.util.ArrayList;
 
-class Book implements Parcelable {
-    String Name;
-    String Author;
-    String Year;
-    int Pages;
-    int CoverImgId;
-    ArrayList<Chapter> Chapters;
+public class Book implements Parcelable {
+    public int Id;
+    public String Name;
+    public String Author;
+    public String Year;
+    public int Pages;
+    public int CoverImgId;
+    public ArrayList<Chapter> Chapters;
 
     private Chapter longestChapter;
     private Chapter shortestChapter;
