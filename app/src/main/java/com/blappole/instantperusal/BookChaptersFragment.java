@@ -1,7 +1,9 @@
 package com.blappole.instantperusal;
 
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -13,6 +15,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.blappole.instantperusal.Database.DbContract;
+import com.blappole.instantperusal.Database.DbHelper;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -88,5 +93,22 @@ public class BookChaptersFragment extends Fragment {
         bundle.putParcelable("book", book);
         fragment.setArguments(bundle);
         return fragment;
+    }
+
+
+    public void addChapterDb(Book b, Chapter c){
+        DbHelper dbHelper = new DbHelper(getContext());
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(DbContract.ChapterEntry.COLUMN_NAME_NAME, c.Name);
+        values.put(DbContract.ChapterEntry.COLUMN_NAME_PAGES, c.Pages);
+
+        long newRowId = db.insert(DbContract.ChapterEntry.TABLE_NAME, null, values);
+
+        values = new ContentValues();
+        values.put(DbContract.BookChaptersEntry.COLUMN_NAME_BOOK, b.Id);
+        values.put(DbContract.BookChaptersEntry.COLUMN_NAME_CHAPTER, c.Id);
+
+        long secondRowId = db.insert(DbContract.BookChaptersEntry.TABLE_NAME, null, values);
     }
 }
