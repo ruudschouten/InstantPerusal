@@ -1,7 +1,10 @@
 package com.blappole.instantperusal;
 
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -17,12 +20,18 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.blappole.instantperusal.Database.DbHelper;
+
 import net.danlew.android.joda.JodaTimeAndroid;
+
+import org.joda.time.Period;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.blappole.instantperusal.Database.DbContract.*;
 
 public class MainActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
@@ -43,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         JodaTimeAndroid.init(this);
-
         setSupportActionBar(toolbar);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,7 +62,9 @@ public class MainActivity extends AppCompatActivity {
         books = new ArrayList<>();
         Book book = new Book("A Game of Thrones", "George R. R. Martin", "1997", 694);
         book.CoverImgId = R.drawable.agot;
-        books.add(book);
+//        addBookDb(book);
+        books = getBooksWithChaptersDb();
+//        books.add(book);
         bookArrayAdapter = new BookArrayAdapter(this, R.layout.book_layout, books);
         lvBooks.setAdapter(bookArrayAdapter);
         lvBooks.setEmptyView(tvEmpty);
@@ -107,16 +117,82 @@ public class MainActivity extends AppCompatActivity {
                 String year = bookYear.getText().toString();
                 String pages = bookPages.getText().toString();
 
-                if(TextUtils.isEmpty(name) || TextUtils.isEmpty(author) || TextUtils.isEmpty(year) || TextUtils.isEmpty(pages)) {
+                if (TextUtils.isEmpty(name) || TextUtils.isEmpty(author) || TextUtils.isEmpty(year) || TextUtils.isEmpty(pages)) {
                     Toast.makeText(MainActivity.this, "Please fill in all fields.", Toast.LENGTH_SHORT).show();
                 } else {
                     Book b = new Book(name, author, year, Integer.valueOf(pages));
                     books.add(b);
+                    addBookDb(b);
                     bookDialog.dismiss();
                     bookArrayAdapter.notifyDataSetChanged();
                 }
             }
         });
         bookDialog.show();
+    }
+
+    public void addBookDb(Book b) {
+        DbHelper dbHelper = new DbHelper(this);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(BookEntry.COLUMN_NAME_NAME, b.Name);
+        values.put(BookEntry.COLUMN_NAME_AUTHOR, b.Author);
+        values.put(BookEntry.COLUMN_NAME_YEAR, b.Year);
+        values.put(BookEntry.COLUMN_NAME_PAGES, b.Pages);
+        values.put(BookEntry.COLUMN_NAME_COVER, b.CoverImgId);
+
+        db.insert(BookEntry.TABLE_NAME, null, values);
+    }
+
+    public ArrayList<Book> getBooksWithChaptersDb() {
+        ArrayList<Book> books = new ArrayList<>();
+        DbHelper dbHelper = new DbHelper(this);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor cursor = db.query(BookEntry.TABLE_NAME, null, null, null, null, null, null);
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(cursor.getColumnIndex(BookEntry._ID));
+            String name = cursor.getString(cursor.getColumnIndex(BookEntry.COLUMN_NAME_NAME));
+            String author = cursor.getString(cursor.getColumnIndex(BookEntry.COLUMN_NAME_AUTHOR));
+            String year = cursor.getString(cursor.getColumnIndex(BookEntry.COLUMN_NAME_YEAR));
+            int pages = cursor.getInt(cursor.getColumnIndex(BookEntry.COLUMN_NAME_PAGES));
+            int cover = cursor.getInt(cursor.getColumnIndex(BookEntry.COLUMN_NAME_COVER));
+            Book b = new Book(name, author, year, pages);
+            b.Id = id;
+            b.CoverImgId = cover;
+            books.add(b);
+        }
+        cursor.close();
+        for (Book b : books) {
+            if (!b.Chapters.isEmpty()) {
+                String query = "SELECT ? FROM ? INNER JOIN ? ON ? = ? INNER JOIN ? ON ? = ? WHERE ? = ?";
+                String[] data = {
+                        String.format("%s, %s, %s, %s", ChapterEntry._ID, ChapterEntry.COLUMN_NAME_NAME, ChapterEntry.COLUMN_NAME_PAGES, ChapterEntry.COLUMN_NAME_SPENT),
+                        BookChaptersEntry.TABLE_NAME,
+                        BookEntry.TABLE_NAME,
+                        BookChaptersEntry.COLUMN_NAME_BOOK,
+                        BookEntry._ID,
+                        ChapterEntry.TABLE_NAME,
+                        BookChaptersEntry.COLUMN_NAME_CHAPTER,
+                        ChapterEntry._ID,
+                        BookEntry.COLUMN_NAME_NAME,
+                        b.Name
+                };
+                cursor = db.rawQuery(query, data);
+                while (cursor.moveToNext()) {
+                    int id = cursor.getInt(cursor.getColumnIndexOrThrow(ChapterEntry._ID));
+                    String name = cursor.getString(cursor.getColumnIndex(ChapterEntry.COLUMN_NAME_NAME));
+                    int pages = cursor.getInt(cursor.getColumnIndex(ChapterEntry.COLUMN_NAME_PAGES));
+                    long spent = cursor.getLong(cursor.getColumnIndex(ChapterEntry.COLUMN_NAME_SPENT));
+                    Chapter c = new Chapter(name, pages);
+                    c.Id = id;
+                    if (spent != 0) {
+                        c.TimeSpent = new Period(spent);
+                    }
+                    b.addChapter(c);
+                }
+                cursor.close();
+            }
+        }
+        return books;
     }
 }
