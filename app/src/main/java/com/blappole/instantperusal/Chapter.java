@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import org.joda.time.*;
 
 public class Chapter implements Parcelable {
-    public int Id;
+    public long Id;
     public String Name;
     public int Pages;
     public Period TimeSpent;
@@ -16,6 +16,7 @@ public class Chapter implements Parcelable {
     //region Parcelable
 
     protected Chapter(Parcel in) {
+        Id = in.readLong();
         Name = in.readString();
         Pages = in.readInt();
     }
@@ -41,6 +42,7 @@ public class Chapter implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(Name);
         parcel.writeInt(Pages);
+        parcel.writeLong(Id);
         if(TimeSpent != null) {
             parcel.writeLong(TimeSpent.getMillis());
         }

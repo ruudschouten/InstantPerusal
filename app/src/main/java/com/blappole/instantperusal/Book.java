@@ -9,7 +9,7 @@ import org.joda.time.format.PeriodFormat;
 import java.util.ArrayList;
 
 public class Book implements Parcelable {
-    public int Id;
+    public long Id;
     public String Name;
     public String Author;
     public String Year;
@@ -22,6 +22,7 @@ public class Book implements Parcelable {
 
     //region Parcelable
     protected Book(Parcel in) {
+        Id = in.readLong();
         Name = in.readString();
         Author = in.readString();
         Year = in.readString();
@@ -49,6 +50,7 @@ public class Book implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeLong(Id);
         parcel.writeString(Name);
         parcel.writeString(Author);
         parcel.writeString(Year);
@@ -73,7 +75,8 @@ public class Book implements Parcelable {
     String getTimeRead() {
         long millis = 0;
         for (Chapter c : Chapters) {
-            millis += c.TimeSpent.getMillis();
+            if (c.TimeSpent != null)
+                millis += c.TimeSpent.getMillis();
         }
         return PeriodFormat.getDefault().print(new Period(millis));
     }
@@ -81,7 +84,8 @@ public class Book implements Parcelable {
     String getAverageTimePerChapter() {
         long millis = 0;
         for (Chapter c : Chapters) {
-            millis += (c.TimeSpent.getMillis());
+            if (c.TimeSpent != null)
+                millis += (c.TimeSpent.getMillis());
         }
         return PeriodFormat.getDefault().print(new Period(millis));
     }
