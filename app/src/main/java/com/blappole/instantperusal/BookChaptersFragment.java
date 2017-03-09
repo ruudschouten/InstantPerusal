@@ -80,6 +80,7 @@ public class BookChaptersFragment extends Fragment {
 
                 Chapter c = new Chapter(name, Integer.valueOf(pages));
                 book.addChapter(c);
+                addChapterDb(book, c);
                 adapter.notifyDataSetChanged();
                 dialog.dismiss();
             }
@@ -102,13 +103,12 @@ public class BookChaptersFragment extends Fragment {
         ContentValues values = new ContentValues();
         values.put(DbContract.ChapterEntry.COLUMN_NAME_NAME, c.Name);
         values.put(DbContract.ChapterEntry.COLUMN_NAME_PAGES, c.Pages);
+        values.put(DbContract.ChapterEntry.COLUMN_NAME_BOOK, b.Id);
 
-        long newRowId = db.insert(DbContract.ChapterEntry.TABLE_NAME, null, values);
+        c.Id = db.insert(DbContract.ChapterEntry.TABLE_NAME, null, values);
 
         values = new ContentValues();
-        values.put(DbContract.BookChaptersEntry.COLUMN_NAME_BOOK, b.Id);
-        values.put(DbContract.BookChaptersEntry.COLUMN_NAME_CHAPTER, c.Id);
 
-        long secondRowId = db.insert(DbContract.BookChaptersEntry.TABLE_NAME, null, values);
+        db.insert(DbContract.ChapterEntry.TABLE_NAME, null, values);
     }
 }
