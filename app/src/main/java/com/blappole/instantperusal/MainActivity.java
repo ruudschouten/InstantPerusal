@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
         book.CoverImgId = R.drawable.agot;
 //        addBookDb(book);
         books = getBooksWithChaptersDb();
-//        books.add(book);
         bookArrayAdapter = new BookArrayAdapter(this, R.layout.book_layout, books);
         lvBooks.setAdapter(bookArrayAdapter);
         lvBooks.setEmptyView(tvEmpty);
@@ -141,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
         values.put(BookEntry.COLUMN_NAME_PAGES, b.Pages);
         values.put(BookEntry.COLUMN_NAME_COVER, b.CoverImgId);
 
-        db.insert(BookEntry.TABLE_NAME, null, values);
+        b.Id = db.insert(BookEntry.TABLE_NAME, null, values);
     }
 
     public ArrayList<Book> getBooksWithChaptersDb() {
@@ -163,35 +162,25 @@ public class MainActivity extends AppCompatActivity {
         }
         cursor.close();
         for (Book b : books) {
-            if (!b.Chapters.isEmpty()) {
-                String query = "SELECT ? FROM ? INNER JOIN ? ON ? = ? INNER JOIN ? ON ? = ? WHERE ? = ?";
-                String[] data = {
-                        String.format("%s, %s, %s, %s", ChapterEntry._ID, ChapterEntry.COLUMN_NAME_NAME, ChapterEntry.COLUMN_NAME_PAGES, ChapterEntry.COLUMN_NAME_SPENT),
-                        BookChaptersEntry.TABLE_NAME,
-                        BookEntry.TABLE_NAME,
-                        BookChaptersEntry.COLUMN_NAME_BOOK,
-                        BookEntry._ID,
-                        ChapterEntry.TABLE_NAME,
-                        BookChaptersEntry.COLUMN_NAME_CHAPTER,
-                        ChapterEntry._ID,
-                        BookEntry.COLUMN_NAME_NAME,
-                        b.Name
-                };
-                cursor = db.rawQuery(query, data);
-                while (cursor.moveToNext()) {
-                    int id = cursor.getInt(cursor.getColumnIndexOrThrow(ChapterEntry._ID));
-                    String name = cursor.getString(cursor.getColumnIndex(ChapterEntry.COLUMN_NAME_NAME));
-                    int pages = cursor.getInt(cursor.getColumnIndex(ChapterEntry.COLUMN_NAME_PAGES));
-                    long spent = cursor.getLong(cursor.getColumnIndex(ChapterEntry.COLUMN_NAME_SPENT));
-                    Chapter c = new Chapter(name, pages);
-                    c.Id = id;
-                    if (spent != 0) {
-                        c.TimeSpent = new Period(spent);
-                    }
-                    b.addChapter(c);
+            String query = String.format("SELECT * FROM %s WHERE %s=?",
+                    ChapterEntry.TABLE_NAME, ChapterEntry.COLUMN_NAME_BOOK);
+            String[] data = {
+                    String.valueOf(b.Id)
+            };
+            cursor = db.rawQuery(query, data);
+            while (cursor.moveToNext()) {
+                int id = cursor.getInt(cursor.getColumnIndexOrThrow(ChapterEntry._ID));
+                String name = cursor.getString(cursor.getColumnIndex(ChapterEntry.COLUMN_NAME_NAME));
+                int pages = cursor.getInt(cursor.getColumnIndex(ChapterEntry.COLUMN_NAME_PAGES));
+                long spent = cursor.getLong(cursor.getColumnIndex(ChapterEntry.COLUMN_NAME_SPENT));
+                Chapter c = new Chapter(name, pages);
+                c.Id = id;
+                if (spent != 0) {
+                    c.TimeSpent = new Period(spent);
                 }
-                cursor.close();
+                b.addChapter(c);
             }
+            cursor.close();
         }
         return books;
     }
