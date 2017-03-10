@@ -19,6 +19,10 @@ public class Chapter implements Parcelable {
         Id = in.readLong();
         Name = in.readString();
         Pages = in.readInt();
+        long time = in.readLong();
+        if(time != 0) {
+            TimeSpent = new Period(time);
+        }
     }
 
     public static final Creator<Chapter> CREATOR = new Creator<Chapter>() {
@@ -40,9 +44,9 @@ public class Chapter implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeLong(Id);
         parcel.writeString(Name);
         parcel.writeInt(Pages);
-        parcel.writeLong(Id);
         if(TimeSpent != null) {
             parcel.writeLong(TimeSpent.getMillis());
         }
