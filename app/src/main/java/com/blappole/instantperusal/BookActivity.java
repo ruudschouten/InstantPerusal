@@ -32,7 +32,11 @@ public class BookActivity extends AppCompatActivity {
         }
         book = savedInstanceState.getParcelable("book");
         assert book != null;
-        setTitle(book.Name);
+        if(book.Name != null) {
+            setTitle(book.Name);
+        } else{
+            setTitle("New book");
+        }
         setSupportActionBar(toolbar);
         BookPagerAdapter bookPagerAdapter = new BookPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(bookPagerAdapter);

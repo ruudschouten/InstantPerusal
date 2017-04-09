@@ -12,10 +12,10 @@ public final class DbContract {
     public static final String SQL_CREATE_BOOK_ENTRIES =
             "CREATE TABLE " + BookEntry.TABLE_NAME + " (" +
                     BookEntry._ID + " INTEGER PRIMARY KEY," +
-                    BookEntry.COLUMN_NAME_NAME + " TEXT NOT NULL," +
-                    BookEntry.COLUMN_NAME_AUTHOR + " TEXT NOT NULL," +
-                    BookEntry.COLUMN_NAME_YEAR + " TEXT NOT NULL," +
-                    BookEntry.COLUMN_NAME_PAGES + " INTEGER NOT NULL," +
+                    BookEntry.COLUMN_NAME_NAME + " TEXT NULL," +
+                    BookEntry.COLUMN_NAME_AUTHOR + " TEXT NULL," +
+                    BookEntry.COLUMN_NAME_YEAR + " TEXT NULL," +
+                    BookEntry.COLUMN_NAME_PAGES + " INTEGER NULL," +
                     BookEntry.COLUMN_NAME_COVER + " INTEGER NULL)";
 
     public static final String SQL_CREATE_CHAPTER_ENTRIES =

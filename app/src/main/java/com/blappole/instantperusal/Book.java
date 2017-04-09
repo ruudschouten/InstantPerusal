@@ -60,7 +60,7 @@ public class Book implements Parcelable {
     }
     //endregion
 
-    Book(String name, String author, String year, int pages) {
+    public Book(String name, String author, String year, int pages) {
         Name = name;
         Author = author;
         Year = year;
@@ -68,7 +68,17 @@ public class Book implements Parcelable {
         Chapters = new ArrayList<>();
     }
 
-    void addChapter(Chapter c) {
+    Book(String name, String author) {
+        Name = name;
+        Author = author;
+        Chapters = new ArrayList<>();
+    }
+
+    Book() {
+        Chapters = new ArrayList<>();
+    }
+
+    public void addChapter(Chapter c) {
         Chapters.add(c);
     }
 

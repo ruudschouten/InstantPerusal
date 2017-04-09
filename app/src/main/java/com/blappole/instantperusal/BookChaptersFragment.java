@@ -1,9 +1,7 @@
 package com.blappole.instantperusal;
 
 import android.app.Dialog;
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -16,8 +14,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.blappole.instantperusal.Database.DbContract;
-import com.blappole.instantperusal.Database.DbHelper;
+import com.blappole.instantperusal.Database.DbAccess;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,16 +26,17 @@ public class BookChaptersFragment extends Fragment {
     Book book;
     ChapterArrayAdapter adapter;
     View v;
+    DbAccess db;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_book_chapters, container, false);
         ButterKnife.bind(this, v);
+        db = new DbAccess(getContext());
 
         if(savedInstanceState == null) {
             savedInstanceState = getArguments();
         }
-
         book = savedInstanceState.getParcelable("book");
         assert book != null;
 
@@ -80,7 +78,7 @@ public class BookChaptersFragment extends Fragment {
 
                 Chapter c = new Chapter(name, Integer.valueOf(pages));
                 book.addChapter(c);
-                addChapterDb(book, c);
+                db.addChapter(book, c);
                 adapter.notifyDataSetChanged();
                 dialog.dismiss();
             }
@@ -94,21 +92,5 @@ public class BookChaptersFragment extends Fragment {
         bundle.putParcelable("book", book);
         fragment.setArguments(bundle);
         return fragment;
-    }
-
-
-    public void addChapterDb(Book b, Chapter c){
-        DbHelper dbHelper = new DbHelper(getContext());
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(DbContract.ChapterEntry.COLUMN_NAME_NAME, c.Name);
-        values.put(DbContract.ChapterEntry.COLUMN_NAME_PAGES, c.Pages);
-        values.put(DbContract.ChapterEntry.COLUMN_NAME_BOOK, b.Id);
-
-        c.Id = db.insert(DbContract.ChapterEntry.TABLE_NAME, null, values);
-
-        values = new ContentValues();
-
-        db.insert(DbContract.ChapterEntry.TABLE_NAME, null, values);
     }
 }

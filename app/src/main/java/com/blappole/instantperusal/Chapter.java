@@ -53,7 +53,7 @@ public class Chapter implements Parcelable {
     }
     //endregion
 
-    Chapter(String name, int pages) {
+    public Chapter(String name, int pages) {
         Name = name;
         Pages = pages;
     }
